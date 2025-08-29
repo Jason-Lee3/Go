@@ -1,7 +1,7 @@
 package main
 
 type Task struct {
-	Id        int
-	Text      string
-	Completed bool
+	id        int
+	text      string
+	completed bool
 }
