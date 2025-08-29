@@ -40,22 +40,22 @@ func loadTask() ([]Task, error) {
 		return initTask, err
 	}
 
-	decodeJsonError := json.Unmarshal(read, &initTask)
-	if decodeJsonError != nil {
-		return initTask, decodeJsonError
+	err = json.Unmarshal(read, &initTask)
+	if err != nil {
+		return initTask, err
 	}
 	return initTask, nil
 }
 
 func saveTask(tasks []Task) error {
-	encode, encodeJsonError := json.Marshal(tasks)
-	if encodeJsonError != nil {
-		return encodeJsonError
+	encode, err := json.Marshal(tasks)
+	if err != nil {
+		return err
 	}
-	writeFileError := os.WriteFile("tasks.json", encode, 0666)
-	if writeFileError != nil {
+	err = os.WriteFile("tasks.json", encode, 0666)
+	if err != nil {
 		fmt.Println("Error occured while writing to file...")
-		return writeFileError
+		return err
 	}
 
 	return nil
@@ -67,25 +67,25 @@ func addTask(text string) error {
 	if err != nil {
 		return err
 	}
-	var max int = 0
+	max := 0
 	for _, task := range tasks {
-		if task.Id > max {
-			max = task.Id
+		if task.id > max {
+			max = task.id
 		}
 	}
-	var newMaxId int = max + 1
+	newMaxId := max + 1
 
 	task := Task{
-		Id:        newMaxId,
-		Text:      text,
-		Completed: false,
+		id:        newMaxId,
+		text:      text,
+		completed: false,
 	}
 
 	tasks = append(tasks, task)
 
-	saveTaskError := saveTask(tasks)
-	if saveTaskError != nil {
-		return saveTaskError
+	err = saveTask(tasks)
+	if err != nil {
+		return err
 	}
 	return nil
 
@@ -102,13 +102,13 @@ func listTask() {
 	}
 
 	for _, task := range tasks {
-		fmt.Print(strconv.Itoa(task.Id) + ".")
-		if task.Completed {
+		fmt.Print(strconv.Itoa(task.id) + ".")
+		if task.completed {
 			fmt.Print(" [x] ")
 		} else {
 			fmt.Print(" [ ] ")
 		}
-		fmt.Println(task.Text)
+		fmt.Println(task.text)
 	}
 }
 
@@ -118,15 +118,15 @@ func deleteTask(id string) {
 		os.Exit(1)
 	}
 	tempTasks := []Task{}
-	ident, conversionError := strconv.Atoi(id)
+	ident, err := strconv.Atoi(id)
 
-	if conversionError != nil {
+	if err != nil {
 		fmt.Println("String cannot be converted to integer. Exiting...")
 		os.Exit(1)
 	}
 
 	for _, task := range tasks {
-		if task.Id != ident {
+		if task.id != ident {
 			tempTasks = append(tempTasks, task)
 		}
 	}
@@ -137,10 +137,10 @@ func deleteTask(id string) {
 		fmt.Printf("Deleted task %+v\n", id)
 	}
 
-	saveError := saveTask(tempTasks)
+	err = saveTask(tempTasks)
 
-	if saveError != nil {
-		fmt.Println("Error:", saveError)
+	if err != nil {
+		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
 }
@@ -153,19 +153,19 @@ func completeTask(id string) {
 	}
 
 	// convert string to int
-	intId, convertError := strconv.Atoi(id)
-	if convertError != nil {
+	intId, err := strconv.Atoi(id)
+	if err != nil {
 		os.Exit(1)
 	}
 	for _, task := range tasks {
-		if task.Id == intId {
-			task.Completed = true
+		if task.id == intId {
+			task.completed = true
 		}
 		newTasks = append(newTasks, task)
 	}
 
-	saveError := saveTask(newTasks)
-	if saveError != nil {
+	err = saveTask(newTasks)
+	if err != nil {
 		os.Exit(1)
 	}
 
