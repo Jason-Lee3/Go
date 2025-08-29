@@ -1,7 +1,7 @@
 package main
 
-type Task struct {
-	id        int
-	text      string
-	completed bool
+type task struct {
+	Id        int
+	Text      string
+	Completed bool
 }

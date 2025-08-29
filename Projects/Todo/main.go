@@ -30,8 +30,8 @@ func main() {
 	}
 }
 
-func loadTask() ([]Task, error) {
-	initTask := []Task{}
+func loadTask() ([]task, error) {
+	initTask := []task{}
 	read, err := os.ReadFile("tasks.json")
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -47,7 +47,7 @@ func loadTask() ([]Task, error) {
 	return initTask, nil
 }
 
-func saveTask(tasks []Task) error {
+func saveTask(tasks []task) error {
 	encode, err := json.Marshal(tasks)
 	if err != nil {
 		return err
@@ -69,16 +69,16 @@ func addTask(text string) error {
 	}
 	max := 0
 	for _, task := range tasks {
-		if task.id > max {
-			max = task.id
+		if task.Id > max {
+			max = task.Id
 		}
 	}
 	newMaxId := max + 1
 
-	task := Task{
-		id:        newMaxId,
-		text:      text,
-		completed: false,
+	task := task{
+		Id:        newMaxId,
+		Text:      text,
+		Completed: false,
 	}
 
 	tasks = append(tasks, task)
@@ -102,13 +102,13 @@ func listTask() {
 	}
 
 	for _, task := range tasks {
-		fmt.Print(strconv.Itoa(task.id) + ".")
-		if task.completed {
+		fmt.Print(strconv.Itoa(task.Id) + ".")
+		if task.Completed {
 			fmt.Print(" [x] ")
 		} else {
 			fmt.Print(" [ ] ")
 		}
-		fmt.Println(task.text)
+		fmt.Println(task.Text)
 	}
 }
 
@@ -117,7 +117,7 @@ func deleteTask(id string) {
 	if err != nil {
 		os.Exit(1)
 	}
-	tempTasks := []Task{}
+	tempTasks := []task{}
 	ident, err := strconv.Atoi(id)
 
 	if err != nil {
@@ -126,7 +126,7 @@ func deleteTask(id string) {
 	}
 
 	for _, task := range tasks {
-		if task.id != ident {
+		if task.Id != ident {
 			tempTasks = append(tempTasks, task)
 		}
 	}
@@ -147,7 +147,7 @@ func deleteTask(id string) {
 
 func completeTask(id string) {
 	tasks, err := loadTask()
-	newTasks := []Task{}
+	newTasks := []task{}
 	if err != nil {
 		os.Exit(1)
 	}
@@ -158,8 +158,8 @@ func completeTask(id string) {
 		os.Exit(1)
 	}
 	for _, task := range tasks {
-		if task.id == intId {
-			task.completed = true
+		if task.Id == intId {
+			task.Completed = true
 		}
 		newTasks = append(newTasks, task)
 	}
