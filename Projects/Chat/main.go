@@ -1,13 +1,16 @@
 package main
 
-import "log"
+import (
+	"log"
+	"net"
+)
 
 func main() {
 	s := newServer()
-	
+
 	listener, err := net.Listen("tcp", ":8888")
 	if err != nil {
-		log.Fatalf("Unable to start serverL %s", err.Error()))
+		log.Fatalf("Unable to start serverL %s", err.Error())
 	}
 
 	defer listener.Close()
