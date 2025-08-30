@@ -20,10 +20,10 @@ func newServer() *server {
 func (s *server) newClient(conn net.Conn) {
 	log.Printf("New client has connected: %s", conn.RemoteAddr().String())
 
-	c := &client{
-		conn: conn,
-		nick: "anonymous",
-		commands: s.commands,
-		
-	}
+	// c := &client{
+	// 	conn: conn,
+	// 	nick: "anonymous",
+	// 	commands: s.commands,
+
+	// }
 }
